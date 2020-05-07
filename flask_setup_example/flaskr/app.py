@@ -54,6 +54,7 @@ def create_app(test_config = None):
                 'success': True,
                 'plant': plant.format()
             })
+
     @app.errorhandler(404)
     def not_found(error):
         return jsonify({
