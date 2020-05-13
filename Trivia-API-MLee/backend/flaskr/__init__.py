@@ -261,7 +261,7 @@ def create_app(test_config=None):
        "success": False,
        "error": 400,
        "message": "bad request"
-       }), 404
+       }), 400
 
   @app.errorhandler(404)
   def not_found(error):
