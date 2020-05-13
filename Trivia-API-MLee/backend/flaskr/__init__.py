@@ -119,31 +119,31 @@ def create_app(test_config=None):
   @app.route('/questions/create', methods=['POST'])
   def create_questions():
       error = False
-      # try:
-      question = request.json['question']
-      answer = request.json['answer']
-      difficulty = request.json['difficulty']
-      category = request.json['category']
+      try:
+          question = request.json['question']
+          answer = request.json['answer']
+          difficulty = request.json['difficulty']
+          category = request.json['category']
 
-     # #Check that all required data is input--if not throw bad request message
-      if question == None or answer == None or difficulty==None or category == None:
+         # #Check that all required data is input--if not throw bad request message
+          if question == None or answer == None or difficulty==None or category == None:
+              abort(400)
+         #  #If so, create new record and insert into database
+          else:
+              new_question = Question(
+              question = question,
+              answer = answer,
+              difficulty = difficulty,
+              category = category
+              )
+              new_question.insert()
+      except:
+          error = True
+          db.session.rollback()
+          print(sys.exc_info())
+      if error:
           abort(400)
-     #  #If so, create new record and insert into database
       else:
-          new_question = Question(
-          question = question,
-          answer = answer,
-          difficulty = difficulty,
-          category = category
-          )
-          new_question.insert()
-      # except:
-      #     error = True
-      #     db.session.rollback()
-      #     print(sys.exc_info())
-      # if error:
-      #     abort(400)
-      # else:
           return jsonify({
           'success': True,
           'question': question,
@@ -166,7 +166,7 @@ def create_app(test_config=None):
   def search_questions():
       #Search for questions containing search term
       searchTerm = request.json['searchTerm']
-      questions = Question.query.filter(Question.question.like('%'+searchTerm+'%')).all()
+      questions = Question.query.filter(Question.question.ilike('%'+searchTerm+'%')).all()
 
       formatted_questions = [question.format() for question in questions]
       return jsonify({
