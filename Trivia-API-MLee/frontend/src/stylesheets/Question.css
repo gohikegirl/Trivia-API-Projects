@@ -8,6 +8,11 @@
   flex-shrink: 2;
 }
 
+.cat-list-option:hover{
+  color: dodgerblue;
+  cursor: pointer;
+}
+
 .categories-list > form {
   width: 60%;
 }
@@ -73,4 +78,5 @@ img.category {
 
 img.delete {
   width: 20px;
+  cursor: pointer;
 }
